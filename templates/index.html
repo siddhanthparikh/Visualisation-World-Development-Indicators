@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Development Indicators</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <style>
+        html,
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-family: "Raleway", sans-serif
+        }
+        div.tooltip {	
+    position: absolute;			
+    text-align: center;			
+    width: 60px;					
+    height: 28px;					
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: white;	
+    border: 1px solid black;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}
+    </style>
+</head>
+
+<body>
+    <div class="w3-sidebar w3-bar-block" id="leftNav" style="width: 300px; display: none;">
+        <div class="w3-bar w3-blue w3-padding w3-large">
+            <p> Settings <i class="material-icons" id="closeNav">close</i></p>
+        </div>
+        <div class="w3-bar-item">
+            <button class="w3-button w3-blue w3-round-large">Ascending Order</button>
+        </div>
+        <div class="w3-bar-item">
+            <button class="w3-button w3-blue w3-round-large">Descending Order</button>
+        </div>
+        <div class="w3-bar-item">
+            <button class="w3-button w3-blue w3-round-large">Alphabetical Order</button>
+        </div>
+
+    </div>
+    <div class="w3-bar w3-blue w3-card">
+        <div class="w3-bar-item" id="openNav">
+            <p><i class="material-icons">menu</i></p>
+        </div>
+        <div class="w3-bar-item">
+            <h3>CSE 564 - World Development Indicators</h3>
+        </div>
+        <div class="w3-bar-item w3-right w3-padding">
+            <p id="playOperation"><i class="material-icons">play_circle_outline</i></p>
+        </div>
+        <div class="w3-bar-item w3-right">
+            <p><span>
+                    Year:
+                    <span id="selectedYearValue"></span>
+                    <input type="range" min="2000" max="2017" value="2000" id="yearRangeSlider" />
+                </span></p>
+        </div>
+        <div class="w3-bar-item w3-right w3-padding">
+            <p ><i id="dropDown" class="material-icons">filter_list</i></p>
+            <div class="dropdown-content" id="myDropDown" style="z-index: 1;display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                color: black;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);">
+                <div class="w3-bar-item">
+                    <select id="attributeSelect"></select>
+                </div>
+                <div class="w3-bar-item">Attibute y: <select id="attributeY"></select></div>
+                <div class="w3-bar-item">Attibute x: <select id="attributeX"></select></div>
+            </div>
+        </div>
+        <div class="w3-bar-item w3-right w3-padding">
+            <p id="noneDesc"><i class="material-icons">sort_by_alpha</i></p>
+        </div>
+        <div class="w3-bar-item w3-right w3-padding">
+            <p id="sortAsc"><i class="material-icons">trending_up</i></p>
+        </div>
+        <div class="w3-bar-item w3-right w3-padding">
+            <p id="sortDesc"><i class="material-icons">trending_down</i></p>
+        </div>
+    </div>
+    <div class="w3-main">
+        <div class="w3-row w3-padding">
+            <div class="w3-third">
+                <div class="w3-container" style="overflow-x: auto" id="mdsPlot">
+                    <svg id="mdsChart" class="w3-card"></svg>
+                </div>
+            </div>
+            <div class="w3-third">
+                <div class="w3-container" style="overflow-x: auto" id="mdsPlot">
+                    <svg id="lineChart" class="w3-card"></svg>
+                </div>
+            </div>
+            <div class="w3-third">
+                <div class="w3-container" style="overflow-x: auto" id="mdsPlot">
+                    <svg id="barChart" class="w3-card"></svg>
+                </div>
+            </div>
+        </div>
+        <div class="w3-row w3-padding">
+            <div class="w3-third">
+                <div class="w3-container" style="overflow-x: auto;" id="comovingPlot">
+                    <svg id="comovingChart" class="w3-card"></svg>
+                </div>
+            </div>
+            <div class="w3-third">
+                <div class="w3-container" id="pcaPlot">
+                    <svg id="pcaChart" class="w3-card"></svg>
+                </div>
+            </div>
+            <div class="w3-third">
+                <div class="w3-container" style="overflow-x: auto;" id="parallelPlot">
+
+                    <svg id="parallelChart" class="w3-card"></svg>
+                </div>
+            </div>
+            <div class="w3-col-s4 ">
+                <div class="w3-container" style="overflow-x: auto" id="mdsPlot">
+                    <!-- <svg id="barChart" class="w3-card"></svg> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{url_for('static', filename= 'app.js')}}"></script>
+</body>
+
+</html>
